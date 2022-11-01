@@ -83,6 +83,16 @@ if __name__ == '__main__':
     test_results = model.evaluate(test['x'], test['y'], verbose=1)
     print(f'Test set: - loss: {test_results[0]} - {metric}: {test_results[1]}')
 
+    # Other metrics:
+    train_pred = model.predict(x_train)
+    val_pred = model.predict(validation['x'])
+    test_pred = model.predict(test['x'])
+    print("Displaying other metrics:")
+    print("\t\tMedAE\tMAPE")
+    print(f"Train:\t{round(median_absolute_error(y_train, train_pred) ,3)}\t{round(mean_absolute_percentage_error(y_train, train_pred), 3)}")
+    print(f"Val  :\t{round(median_absolute_error(validation['y'], val_pred) ,3)}\t{round(mean_absolute_percentage_error(validation['y'], val_pred), 3)}")
+    print(f"Test :\t{round(median_absolute_error(test['y'], test_pred) ,3)}\t{round(mean_absolute_percentage_error(test['y'], test_pred), 3)}")
+
     # Display function:
     plt.scatter(dataset['x'], dataset['y'])
     plt.plot(x_train.sort_values(), model.predict(x_train.sort_values()), c='red')
