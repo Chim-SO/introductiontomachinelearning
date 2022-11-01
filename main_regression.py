@@ -1,19 +1,17 @@
-import numpy as np
 from keras import Input
-from numpy.random import seed
-import tensorflow as tf
-import random
-
 from keras.models import Sequential
 from keras.layers import Dense
-
-seed(1)
-tf.random.set_seed(1)
-tf.config.experimental.enable_op_determinism()
-random.seed(2)
-
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.metrics import median_absolute_error, mean_absolute_percentage_error
+
+from numpy.random import seed
+seed(1)
+import tensorflow as tf
+tf.random.set_seed(1)
+tf.config.experimental.enable_op_determinism()
+import random
+random.seed(2)
 
 
 def split_dataset(dataset, train_frac=0.7):
@@ -24,7 +22,7 @@ def split_dataset(dataset, train_frac=0.7):
 
 if __name__ == '__main__':
     # Read dataset:
-    dataset = pd.read_csv('dataset/regression/regression_dataset.csv')
+    dataset = pd.read_csv('dataset/regression/train.csv')
     print(f"There is {len(dataset.index)} instances.")
     print(dataset.head())
     plt.scatter(dataset['x'], dataset['y'])
@@ -34,13 +32,13 @@ if __name__ == '__main__':
     plt.show()
 
     # Split dataset into train and validation:
-    train, test = split_dataset(dataset, train_frac=0.8)
-    plt.scatter(train['x'], train['y'], c='blue', alpha=0.3)
-    plt.scatter(test['x'], test['y'], c='red', alpha=0.3)
+    train, validation = split_dataset(dataset, train_frac=0.7)
+    plt.scatter(train['x'], train['y'], c='blue', alpha=0.4)
+    plt.scatter(validation['x'], validation['y'], c='red', alpha=0.4)
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.legend(['train set', 'test set'], framealpha=0.3)
-    plt.savefig('dataset/regression/dataset_train_test.png', bbox_inches='tight')
+    plt.legend(['train set', 'validation set'], framealpha=0.3)
+    plt.savefig('dataset/regression/dataset_split.png', bbox_inches='tight')
     plt.show()
 
     # Create model:
@@ -53,11 +51,13 @@ if __name__ == '__main__':
     print(model.summary())
 
     # Train:
+    loss = 'mse'
+    metric = 'mae'
     epochs = 2500
     x_train, y_train = train['x'], train['y']
-    print(x_train)
-    model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-    history = model.fit(x_train, y_train, epochs=epochs, batch_size=64, verbose=1, validation_split=0.2)
+    x_val, y_val = validation['x'], validation['y']
+    model.compile(loss=loss, optimizer='adam', metrics=[metric])
+    history = model.fit(x_train, y_train, epochs=epochs, batch_size=64, verbose=1, validation_data=(x_val, y_val))
 
     # Display loss:
     plt.plot(history.history['loss'])
@@ -65,24 +65,25 @@ if __name__ == '__main__':
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
-    plt.legend(['train', 'test'])
+    plt.legend(['train', 'validation'])
     plt.savefig('dataset/regression/loss.png', bbox_inches='tight')
     plt.show()
     # Display metric:
-    plt.plot(history.history['mae'])
-    plt.plot(history.history['val_mae'])
-    plt.title('model mean absolute error (mae)')
+    plt.plot(history.history[metric])
+    plt.plot(history.history[f'val_{metric}'])
+    plt.title(f'model {metric}')
     plt.ylabel('mae')
     plt.xlabel('epoch')
-    plt.legend(['train', 'test'])
-    plt.savefig('dataset/regression/mae.png', bbox_inches='tight')
+    plt.legend(['train', 'validation'])
+    plt.savefig(f'dataset/regression/{metric}.png', bbox_inches='tight')
     plt.show()
 
-    # Validate:
+    # Evaluate on test set:
+    test = pd.read_csv('dataset/regression/test.csv')
     test_results = model.evaluate(test['x'], test['y'], verbose=1)
-    print(f'Test results - Loss: {test_results[0]} - MAE: {test_results[1]}%')
+    print(f'Test set: - loss: {test_results[0]} - {metric}: {test_results[1]}')
 
-    # Other display:
+    # Display function:
     plt.scatter(dataset['x'], dataset['y'])
     plt.plot(x_train.sort_values(), model.predict(x_train.sort_values()), c='red')
     plt.xlabel('x')
