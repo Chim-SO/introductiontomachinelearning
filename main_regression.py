@@ -1,15 +1,16 @@
-from keras import Input
-from keras.models import Sequential
-from keras.layers import Dense
+from tensorflow.python.keras import Input
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import median_absolute_error, mean_absolute_percentage_error
+import numpy as np
 
 from numpy.random import seed
 seed(1)
-import tensorflow as tf
-tf.random.set_seed(1)
-tf.config.experimental.enable_op_determinism()
+from tensorflow import random, config
+random.set_seed(1)
+config.experimental.enable_op_determinism()
 import random
 random.seed(2)
 
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     # Train:
     loss = 'mse'
     metric = 'mae'
-    epochs = 2500
+    epochs = 1750
     x_train, y_train = train['x'], train['y']
     x_val, y_val = validation['x'], validation['y']
     model.compile(loss=loss, optimizer='adam', metrics=[metric])
@@ -95,7 +96,8 @@ if __name__ == '__main__':
 
     # Display function:
     plt.scatter(dataset['x'], dataset['y'])
-    plt.plot(x_train.sort_values(), model.predict(x_train.sort_values()), c='red')
+    x = np.arange(0, 25, 0.1).tolist()
+    plt.plot(x, model.predict(x), c='red')
     plt.xlabel('x')
     plt.ylabel('y')
     plt.savefig('dataset/regression/learnt_function.png', bbox_inches='tight')
