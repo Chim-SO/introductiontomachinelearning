@@ -4,7 +4,7 @@ from tensorflow.python.keras.layers import Dense
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import median_absolute_error, mean_absolute_percentage_error
-import numpy as np
+from numpy import arange
 
 from numpy.random import seed
 seed(1)
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
     # Display function:
     plt.scatter(dataset['x'], dataset['y'])
-    x = np.arange(0, 25, 0.1).tolist()
+    x = arange(0, 25, 0.1).tolist()
     plt.plot(x, model.predict(x), c='red')
     plt.xlabel('x')
     plt.ylabel('y')
