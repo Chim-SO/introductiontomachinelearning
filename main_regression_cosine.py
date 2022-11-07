@@ -24,7 +24,7 @@ def split_dataset(dataset, train_frac=0.7):
 if __name__ == '__main__':
     # Read dataset:
     dataset = pd.read_csv('dataset/regression/cosine/train.csv')
-    print(f"There is {len(dataset.index)} instances.")
+    print(f"There are {len(dataset.index)} instances.")
     print(dataset.head())
     plt.scatter(dataset['x'], dataset['y'])
     plt.xlabel('x')
