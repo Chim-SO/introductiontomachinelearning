@@ -23,7 +23,7 @@ def split_dataset(dataset, train_frac=0.7):
 
 if __name__ == '__main__':
     # Read dataset:
-    dataset = pd.read_csv('dataset/regression/train.csv')
+    dataset = pd.read_csv('dataset/regression/cosine/train.csv')
     print(f"There is {len(dataset.index)} instances.")
     print(dataset.head())
     plt.scatter(dataset['x'], dataset['y'])
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     plt.show()
 
     # Evaluate on test set:
-    test = pd.read_csv('dataset/regression/test.csv')
+    test = pd.read_csv('dataset/regression/cosine/test.csv')
     test_results = model.evaluate(test['x'], test['y'], verbose=1)
     print(f'Test set: - loss: {test_results[0]} - {metric}: {test_results[1]}')
 
