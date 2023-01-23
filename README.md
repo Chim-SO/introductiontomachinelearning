@@ -1,4 +1,4 @@
-# introductiontomachinelearning
+# Introduction to machine learning
 This repository contains the code examples of my medium tutorial "[A Brief Introduction to Neural Networks : A Regression Problem](https://medium.com/towards-data-science/a-brief-introduction-to-neural-networks-a-regression-problem-c58c26e18008)".  
 
 "A Brief Introduction to Neural Networks" tutorial is beginner-friendly in which we will simply investigate several types of neural networks.
