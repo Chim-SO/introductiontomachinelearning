@@ -29,7 +29,6 @@ if __name__ == '__main__':
     plt.scatter(dataset['x'], dataset['y'])
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.savefig('dataset/regression/dataset.png', bbox_inches='tight')
     plt.show()
 
     # Split dataset into train and validation:
@@ -39,7 +38,6 @@ if __name__ == '__main__':
     plt.xlabel('x')
     plt.ylabel('y')
     plt.legend(['train set', 'validation set'], framealpha=0.3)
-    plt.savefig('dataset/regression/dataset_split.png', bbox_inches='tight')
     plt.show()
 
     # Create model:
@@ -67,7 +65,6 @@ if __name__ == '__main__':
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'])
-    plt.savefig('dataset/regression/loss.png', bbox_inches='tight')
     plt.show()
     # Display metric:
     plt.plot(history.history[metric])
@@ -76,7 +73,6 @@ if __name__ == '__main__':
     plt.ylabel('mae')
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'])
-    plt.savefig(f'dataset/regression/{metric}.png', bbox_inches='tight')
     plt.show()
 
     # Evaluate on test set:
@@ -100,5 +96,4 @@ if __name__ == '__main__':
     plt.plot(x, model.predict(x), c='red')
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.savefig('dataset/regression/learnt_function.png', bbox_inches='tight')
     plt.show()
